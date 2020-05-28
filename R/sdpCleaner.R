@@ -65,7 +65,7 @@ id_schools <- function(courses, school_ids) {
 
   stopifnot(all(!is.na(d$school_id)))
 
-  dplyr::select(d, -.data$school_name)
+  d
 }
 
 
