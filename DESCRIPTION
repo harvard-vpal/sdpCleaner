@@ -1,0 +1,19 @@
+Package: sdpCleaner
+Type: Package
+Title: School/department/program metadata cleaner
+Version: 0.1.0
+Author: Devin McCabe
+Maintainer: Devin McCabe <nospam@example.com>
+Description: Clean school, department, program metadata.
+License: file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports:
+    magrittr,
+    dplyr,
+    tidyr,
+    googlesheets4,
+    stringr,
+    jsonlite,
+    rlang
+RoxygenNote: 7.1.0
