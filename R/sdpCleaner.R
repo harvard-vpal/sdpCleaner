@@ -149,8 +149,7 @@ deconvolute_program_and_depts <- function(courses, dept_program_map, course_code
   }
 
   dplyr::bind_rows(courses_from_program_and_abbr, courses_from_program, courses_from_abbr) %>%
-    dplyr::select(-.data$temp_id, -.data$program_abbr) %>%
-    dplyr::rename(!!course_code_colname := .data$code)
+    dplyr::select(-.data$temp_id, -.data$program_abbr, -.data$code)
 }
 
 
@@ -183,15 +182,27 @@ gen_sdp_ids <- function(courses) {
 #' @param courses (tibble)
 #' @param course_code_colname (character)
 clean_sdp <- function(courses, course_code_colname = "code") {
+  sdp_in <- courses %>%
+    dplyr::select(.data$course_school, .data$course_dept, !!course_code_colname) %>%
+    dplyr::distinct() %>%
+    dplyr::mutate(sdp_id = seq_len(dplyr::n()))
+
   school_renames <- sdpCleaner::get_school_renames()
   school_ids <- sdpCleaner::get_school_ids()
   dept_renames <- sdpCleaner::get_dept_renames()
   dept_program_map <- sdpCleaner::get_dept_program_map()
 
-  courses %>%
+  sdp_out <- sdp_in %>%
     sdpCleaner::rename_schools(school_renames) %>%
     sdpCleaner::id_schools(school_ids) %>%
     sdpCleaner::rename_depts(dept_renames) %>%
     sdpCleaner::deconvolute_program_and_depts(dept_program_map, course_code_colname) %>%
     sdpCleaner::gen_sdp_ids()
+
+  sdp <- dplyr::inner_join(sdp_in, sdp_out, by = "sdp_id") %>%
+    dplyr::select(-.data$sdp_id)
+
+  courses %>%
+    dplyr::left_join(sdp, by = c("course_school", "course_dept", "code")) %>%
+    dplyr::select(-.data$course_school, -.data$course_dept)
 }
