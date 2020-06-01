@@ -203,6 +203,6 @@ clean_sdp <- function(courses, course_code_colname = "code") {
     dplyr::select(-.data$sdp_id)
 
   courses %>%
-    dplyr::left_join(sdp, by = c("course_school", "course_dept", "code")) %>%
+    dplyr::left_join(sdp, by = c("course_school", "course_dept", course_code_colname)) %>%
     dplyr::select(-.data$course_school, -.data$course_dept)
 }
