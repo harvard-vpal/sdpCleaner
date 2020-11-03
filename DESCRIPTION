@@ -1,7 +1,7 @@
 Package: sdpCleaner
 Type: Package
 Title: School/department/program metadata cleaner
-Version: 0.1.3
+Version: 0.1.4
 Author: Devin McCabe
 Maintainer: Devin McCabe <nospam@example.com>
 Description: Clean school, department, program metadata.

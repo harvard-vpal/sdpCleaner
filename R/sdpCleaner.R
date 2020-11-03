@@ -63,7 +63,15 @@ id_schools <- function(courses, school_ids) {
     by = "school_name"
   )
 
-  stopifnot(all(!is.na(d$school_id)))
+  schools_todo <- d %>% dplyr::filter(is.na(.data$school_id))
+
+  if (nrow(schools_todo) > 0) {
+    missing_schools <- schools_todo %>%
+      dplyr::select(.data$school_name, .data$course_dept, .data$code) %>%
+      jsonlite::toJSON()
+
+    stop("Missing school for: ", missing_schools)
+  }
 
   d
 }
